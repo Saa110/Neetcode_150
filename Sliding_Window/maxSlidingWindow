@@ -1,0 +1,27 @@
+import heapq
+from typing import List
+
+class Solution:
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        if not nums: return [] # Handle empty list edge case
+        if k == 1: return nums
+        
+        # 1. Initialize Heap for first window
+        # Store as (-value, index) for Max-Heap simulation
+        h = [(-val, idx) for idx, val in enumerate(nums[:k])]
+        heapq.heapify(h)
+        
+        rtr_list = []
+        
+        # 2. Add max of first window
+        rtr_list.append(-h[0][0])
+        
+        # 3. Slide the window
+        for i in range(k, len(nums)):
+            heapq.heappush(h, (-nums[i], i))
+            while h[0][1] <= i - k:
+                heapq.heappop(h)
+            
+            rtr_list.append(-h[0][0])
+            
+        return rtr_list
